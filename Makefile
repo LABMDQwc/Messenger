@@ -1,4 +1,9 @@
 CC = gcc
-FLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 
-all:
+all: main.o
+	$(CC) *.o -o messenger
+main.o: main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
+clean:
+	rm -f *.o

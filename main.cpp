@@ -1,5 +1,3 @@
-#include <iostream>
-
-int main(void) {
+int main() {
 	return 0;
 }
