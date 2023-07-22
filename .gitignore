@@ -1,3 +1,5 @@
 build/
 *.cmake
 *.txt
+*.out
+*.o
