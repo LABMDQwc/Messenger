@@ -1,5 +1,2 @@
+bin/
 build/
-*.cmake
-*.txt
-*.out
-*.o

@@ -1,9 +1,9 @@
-CC = gcc
-CFLAGS = -Wall -Werror -Wextra
+CC = g++
+CFLAGS = -Wall -Wextra -Werror
 
-all: main.o
-	$(CC) *.o -o messenger
-main.o: main.cpp
-	$(CC) $(CFLAGS) -c $< -o $@
+all: build/main.o
+	$(CC) $(CFLAGS) build/*.o -o bin/messenger
 clean:
-	rm -f *.o messenger
+	rm -f build/* bin/*
+build/main.o: src/main.cpp
+	$(CC) $(CFLAGS) -c $< -o $@
