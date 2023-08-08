@@ -1,10 +1,12 @@
 #include "main_window.h"
+#include "tabs.h"
 #include <QTabWidget>
 
 MainWindow::MainWindow(QMainWindow *parent)
     : QMainWindow(parent)
 {
-    QTabWidget *tab = new QTabWidget(this);
-    tab->setGeometry(0,0,750,30);
+    Tabs *tabs = new Tabs();
+    tabs->show();
+
     setWindowTitle("Messenger");
 }

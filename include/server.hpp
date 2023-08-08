@@ -1,7 +1,14 @@
-#ifndef _MESSENGER_SERVER_HPP
-#define _MESSENGER_SERVER_HPP
-#include "chat.hpp"
+#pragma once
+#include <boost/asio.hpp>
+using namespace boost::asio;
 
-void show_chat(const class Chat& chat);
+class Server {
+ private:
+  io_context& service_;
+  ip::tcp::acceptor acceptor_;
 
-#endif  //_MESSENGER_SERVER_HPP
+ public:
+  Server(io_context&, size_t);
+  void start();
+};
+void read(ip::tcp::socket&);
