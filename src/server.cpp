@@ -3,11 +3,11 @@
 boost::asio::streambuf b(65000);
 
 Server::Server(io_context& io_context, size_t port)
-    : service_(io_context),
-      acceptor_(service_, ip::tcp::endpoint(ip::tcp::v4(), port)) {}
+    : _service(io_context),
+      _acceptor(_service, ip::tcp::endpoint(ip::tcp::v4(), port)) {}
 void Server::start() {
-  ip::tcp::socket socket(service_);
-  acceptor_.async_accept(socket, [&](const boost::system::error_code& ec) {
+  ip::tcp::socket socket(_service);
+  _acceptor.async_accept(socket, [&](const boost::system::error_code& ec) {
     if (!ec) {
       std::cout << "connected\n";
       read(socket);
@@ -16,7 +16,7 @@ void Server::start() {
       std::cout << ec.message() << std::endl;
     }
   });
-  service_.run();
+  _service.run();
 }
 void read(ip::tcp::socket& socket) {
   async_read_until(socket, b, '\n',

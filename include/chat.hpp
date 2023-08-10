@@ -5,18 +5,23 @@
 #include "user.hpp"
 
 class Chat {
+ private:
+  std::unordered_set<User*> _members;
+
  public:
-  Chat(User& user1, User& user2);
-  void write(const std::string mes, User& user);
+  Chat(User&, User&);
+  void write(const std::string&, const User&);
 
   class Message {
-   public:
-    Message(std::string str, const User& user);
+   private:
+    std::chrono::system_clock::time_point _time;
+    std::string _message;
+    const User& _user;
 
-    std::chrono::system_clock::time_point time_;
-    std::string message_;
-    const User& user_;
+   public:
+    Message(std::string, const User&);
   };
-  std::unordered_set<User*> members_;
-  std::list<Message> messages_;
+
+ private:
+  std::list<Message> _messages;
 };

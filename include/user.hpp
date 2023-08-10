@@ -2,10 +2,10 @@
 #include <string>
 
 class User {
- public:
-  User(const std::string_view& username, const std::string_view& password);
+ private:
+  const std::string _username;
+  std::string _password;
 
-  size_t _id;
-  const std::string username_;
-  std::string password_;
+ public:
+  User(const std::string_view&, const std::string_view&);
 };

@@ -4,8 +4,8 @@ using namespace boost::asio;
 
 class Server {
  private:
-  io_context& service_;
-  ip::tcp::acceptor acceptor_;
+  io_context& _service;
+  ip::tcp::acceptor _acceptor;
 
  public:
   Server(io_context&, size_t);
