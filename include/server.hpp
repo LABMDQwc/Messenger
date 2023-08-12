@@ -1,5 +1,8 @@
 #pragma once
-#include <boost/asio.hpp>
+#include <boost/asio/streambuf.hpp>
+#include <boost/asio/read_until.hpp>
+#include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/write.hpp>
 using namespace boost::asio;
 
 class Server {
@@ -11,4 +14,7 @@ class Server {
   Server(io_context&, size_t);
   void start();
 };
+
 void read(ip::tcp::socket&);
+
+void auth(ip::tcp::socket&);

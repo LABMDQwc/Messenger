@@ -1,5 +1,6 @@
 bin/
 build/
-build-messenger_gui-Desktop-Debug
+build-messenger_gui-Desktop-Debug/
+users_db
 .idea/
 .clang-format
