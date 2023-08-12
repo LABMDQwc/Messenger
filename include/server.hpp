@@ -1,7 +1,7 @@
 #pragma once
-#include <boost/asio/streambuf.hpp>
-#include <boost/asio/read_until.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/asio/read_until.hpp>
+#include <boost/asio/streambuf.hpp>
 #include <boost/asio/write.hpp>
 using namespace boost::asio;
 
@@ -17,4 +17,8 @@ class Server {
 
 void read(ip::tcp::socket&);
 
+void reg(ip::tcp::socket&);
+
 void auth(ip::tcp::socket&);
+
+bool find_acc(const std::string& log, const std::string& pass);
