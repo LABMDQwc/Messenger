@@ -1,6 +1,5 @@
 #include "../include/server.hpp"
 #include <fstream>
-#include <iostream>
 boost::asio::streambuf b(1024);
 std::string login;
 std::string pass;
@@ -12,7 +11,6 @@ Server::Server(io_context& io_context, size_t port)
 void Server::start() {
   ip::tcp::socket socket(_service);
   _acceptor.async_accept(socket, [&](const boost::system::error_code& ec) {
-    std::cout << "connected\n";
     if (!ec) {
       auth(socket);
       start();
@@ -20,25 +18,6 @@ void Server::start() {
   });
   _service.run();
 }
-
-//void read(ip::tcp::socket& socket) {
-//  async_read_until(socket, b, '\n',
-//                   [&](const boost::system::error_code& ec, size_t bytes) {
-//                     if (!ec) {
-//                       b.commit(bytes);
-//                       std::istream is(&b);
-//                       std::vector<std::string> message;
-//                       std::string w;
-//                       while (is.peek() != '\r' && is >> w) {
-//                         message.push_back(w);
-//                         message.emplace_back(" ");
-//                       }
-//                       message.emplace_back("\n");
-//                       b.consume(bytes);
-//                       read(socket);
-//                     }
-//                   });
-//}
 
 void reg(ip::tcp::socket& socket) {
   async_write(
@@ -123,14 +102,14 @@ void auth(ip::tcp::socket& socket) {
       });
 }
 
-bool find_acc(const std::string& login, const std::string& pass) {
-  std::ifstream users_db("users_db");
+bool find_acc(const std::string& log, const std::string& pas) {
+  std::fstream users_db("users_db");
   std::string db_login, db_pass;
   while (!users_db.eof()) {
     std::getline(users_db, db_login, ';');
     std::getline(users_db, db_pass, '\n');
-    if (db_login == login &&
-        db_pass == std::to_string(std::hash<std::string>{}(pass))) {
+    if (db_login == log &&
+        db_pass == std::to_string(std::hash<std::string>{}(pas))) {
       users_db.close();
       return true;
     }

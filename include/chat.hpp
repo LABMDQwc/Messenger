@@ -10,7 +10,6 @@ class Chat {
 
  public:
   Chat(User&, User&);
-  void write(const std::string&, const User&);
 
   class Message {
    private:
