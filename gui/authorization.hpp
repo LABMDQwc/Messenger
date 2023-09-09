@@ -1,18 +1,26 @@
 #pragma once
 #include <QWidget>
+#include <QTcpSocket>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QVBoxLayout>
 
 class Auth : public QWidget {
+    Q_OBJECT
 private:
-    QLineEdit *fld_login;
-    QLineEdit *fld_pass;
-    QPushButton *btn_login;
-    QPushButton *btn_reg;
+    QLineEdit *_login;
+    QLineEdit *_pass;
+    QPushButton *_btn_login;
+    QPushButton *_btn_sign;
+    QVBoxLayout *_layout;
+    QTcpSocket *_socket;
 public:
-    Auth(QWidget *parent = nullptr);
+    Auth() = delete;
+    Auth(QTcpSocket*);
     ~Auth();
-    void auth();
-signals:
-    void signal();
+    QString get_login();
+    QString get_pass();
+private slots:
+    void login();
+    void signup();
 };

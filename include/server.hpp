@@ -15,10 +15,10 @@ class Server {
   void start();
 };
 
-void read(ip::tcp::socket&);
-
-void reg(ip::tcp::socket&);
-
 void auth(ip::tcp::socket&);
 
-bool find_acc(const std::string& log, const std::string& pass);
+void sign_in(ip::tcp::socket&, std::istream&);
+
+void sign_up(ip::tcp::socket&, std::istream&);
+
+bool find_acc(const std::string&, const std::string&);

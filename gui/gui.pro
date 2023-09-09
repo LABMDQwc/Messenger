@@ -8,8 +8,10 @@ TARGET = Messenger
 SOURCES += \
     authorization.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    session.cpp
 
 HEADERS += \
     authorization.hpp \
-    mainwindow.hpp
+    mainwindow.hpp \
+    session.hpp
