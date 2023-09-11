@@ -3,11 +3,12 @@
 #include <QTcpSocket>
 
 class MainWindow : public QMainWindow {
-    Q_OBJECT
-private:
-    QTcpSocket *_socket;
-    void makeconnection();
-public:
-    MainWindow();
-    ~MainWindow();
+  Q_OBJECT
+ private:
+  QTcpSocket* _socket;
+  void makeconnection();
+
+ public:
+  MainWindow();
+  ~MainWindow();
 };

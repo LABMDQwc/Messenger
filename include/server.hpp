@@ -21,4 +21,6 @@ void sign_in(ip::tcp::socket&, std::istream&);
 
 void sign_up(ip::tcp::socket&, std::istream&);
 
+void make_session(ip::tcp::socket&);
+
 bool find_acc(const std::string&, const std::string&);
