@@ -7,8 +7,8 @@ MainWindow::MainWindow() : _socket(new QTcpSocket) {
   makeconnection();
   Auth* auth = new Auth(_socket);
   setCentralWidget(auth);
-  Session* session = new Session();
-  setCentralWidget(session);
+  //  Session* session = new Session();
+  //  setCentralWidget(session);
 }
 
 MainWindow::~MainWindow() {

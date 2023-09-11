@@ -63,7 +63,7 @@ void Auth::signup() {
   _socket->write("\nEND");
   _socket->waitForBytesWritten(1000);
   _socket->waitForReadyRead(3000);
-  if (!qstrcmp(_socket->readLine().data(), "REGISTER")) {
+  if (!qstrcmp(_socket->readLine().data(), "SIGNUP")) {
     sign_up->setText("Registered Successfully");
     qDebug() << "registered";
   }

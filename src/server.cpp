@@ -1,10 +1,11 @@
 #include "../include/server.hpp"
 #include <fstream>
 #include <iostream>
-#include "../include/session.hpp"
+#include "../include/log.hpp"
 #include "../include/user.hpp"
 boost::asio::streambuf b(1024);
 std::string REQ;
+Logger logger;
 
 Server::Server(io_context& io_context, size_t port)
     : _service(io_context),
@@ -14,9 +15,8 @@ void Server::start() {
   ip::tcp::socket socket(_service);
   _acceptor.async_accept(socket, [&](const boost::system::error_code& ec) {
     if (!ec) {
-      std::cout << "connected" << std::endl;
+      logger.write("CONNECTED", INFO);
       auth(socket);
-      make_session(socket);
       start();
     }
   });
@@ -28,19 +28,22 @@ void auth(ip::tcp::socket& socket) {
       socket, b, "\nEND", [&](const boost::system::error_code&, size_t bytes) {
         std::istream is(&b);
         is >> REQ;
-        std::cout << REQ << std::endl;
+        logger.write(REQ, DEBUG);
         if (REQ == "LOGIN") {
           sign_in(socket, is);
-        } else if (REQ == "REGISTER") {
+          b.consume(bytes);
+        } else if (REQ == "SIGNUP") {
           sign_up(socket, is);
           b.consume(bytes);
           auth(socket);
         } else {
-          async_write(
-              socket, boost::asio::buffer("400"),
-              [&](const boost::system::error_code&, size_t) { auth(socket); });
+          async_write(socket, boost::asio::buffer("400"),
+                      [&](const boost::system::error_code&, size_t) {
+                        logger.write("400", FATAL);
+                        b.consume(bytes);
+                        auth(socket);
+                      });
         }
-        b.consume(bytes);
       });
 }
 
@@ -51,11 +54,15 @@ void sign_in(ip::tcp::socket& socket, std::istream& is) {
   is >> pass;
   if (find_acc(login, pass)) {
     async_write(socket, boost::asio::buffer("LOGIN"),
-                [&](const boost::system::error_code&, size_t) {});
+                [&](const boost::system::error_code&, size_t) {
+                  logger.write("LOGGGED IN", INFO);
+                });
   } else {
-    async_write(
-        socket, boost::asio::buffer("LOGIN_FAIL"),
-        [&](const boost::system::error_code&, size_t) { auth(socket); });
+    async_write(socket, boost::asio::buffer("LOGIN_FAIL"),
+                [&](const boost::system::error_code&, size_t) {
+                  logger.write("FAILED LOGGING IN", INFO);
+                  auth(socket);
+                });
   }
 }
 
@@ -64,14 +71,18 @@ void sign_up(ip::tcp::socket& socket, std::istream& is) {
   std::string pass;
   is >> login;
   is >> pass;
-  async_write(socket, boost::asio::buffer("REGISTER"),
-              [&](const boost::system::error_code&, size_t) {});
+  async_write(socket, boost::asio::buffer("SIGNUP"),
+              [&](const boost::system::error_code&, size_t) {
+                logger.write("REGISTRED", INFO);
+              });
   std::ofstream users_db("users_db", std::ios::app);
   users_db << login << ';' << std::hash<std::string>{}(pass) << '\n';
   users_db.close();
 }
 
-void make_session(ip::tcp::socket& socket) {}
+// void make_session(ip::tcp::socket& socket) {
+
+// }
 
 bool find_acc(const std::string& login, const std::string& pass) {
   std::fstream users_db("users_db");

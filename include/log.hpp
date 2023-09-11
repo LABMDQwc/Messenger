@@ -6,7 +6,7 @@
 #include <mutex>
 #include <thread>
 
-#define LOG_FILE "../log.log"
+#define LOG_FILE "log.log"
 
 #define DEBUG "\033[38;2;88;199;127m[DEBUG]\033[0m    "
 #define INFO "\033[32m[INFO]\033[0m     "
@@ -18,8 +18,8 @@ namespace chrono = std::chrono;
 
 class Logger {
  private:
-  std::ifstream log;
-  std::mutex mutex;
+  std::fstream _log;
+  std::mutex _mutex;
 
  public:
   Logger();

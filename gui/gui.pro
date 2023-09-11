@@ -1,10 +1,20 @@
 TEMPLATE = app
 
-    QT += widgets network
+QT += widgets \
+        network
 
-        TARGET = Messenger
+TARGET = Messenger
 
-            SOURCES += authorization.cpp main.cpp mainwindow.cpp session.cpp
+SOURCES += \
+            authorization.cpp \
+            main.cpp \
+            mainwindow.cpp \
+            session.cpp
 
-                           HEADERS +=
-    authorization.hpp mainwindow.hpp session.hpp
+HEADERS += \
+    authorization.hpp \
+    mainwindow.hpp \
+    session.hpp \
+    authorization.hpp \
+    mainwindow.hpp \
+    session.hpp
