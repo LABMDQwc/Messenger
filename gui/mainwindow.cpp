@@ -18,7 +18,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::makeconnection() {
   _socket->connectToHost("localhost", 19518);
-  if (_socket->waitForConnected(3000)) {
+  if (_socket->waitForConnected(2500)) {
     qDebug() << "Connected!";
-  }
+  };
 }

@@ -42,7 +42,7 @@ void Auth::login() {
   _socket->write(get_pass().toLocal8Bit());
   _socket->write("\nEND");
   _socket->waitForBytesWritten(1000);
-  _socket->waitForReadyRead(3000);
+  _socket->waitForReadyRead(1000);
   if (!qstrcmp(_socket->readLine().data(), "LOGIN")) {
     log_in->setText("Log in Successfully");
     qDebug() << "log in";

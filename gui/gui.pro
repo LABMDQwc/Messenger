@@ -14,7 +14,4 @@ SOURCES += \
 HEADERS += \
     authorization.hpp \
     mainwindow.hpp \
-    session.hpp \
-    authorization.hpp \
-    mainwindow.hpp \
     session.hpp

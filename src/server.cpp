@@ -18,33 +18,40 @@ void Server::start() {
       logger.write("CONNECTED", INFO);
       auth(socket);
       start();
+    } else {
+      logger.write(ec.message(), DEBUG);
     }
   });
   _service.run();
 }
 
 void auth(ip::tcp::socket& socket) {
-  async_read_until(
-      socket, b, "\nEND", [&](const boost::system::error_code&, size_t bytes) {
-        std::istream is(&b);
-        is >> REQ;
-        logger.write(REQ, DEBUG);
-        if (REQ == "LOGIN") {
-          sign_in(socket, is);
-          b.consume(bytes);
-        } else if (REQ == "SIGNUP") {
-          sign_up(socket, is);
-          b.consume(bytes);
-          auth(socket);
-        } else {
-          async_write(socket, boost::asio::buffer("400"),
-                      [&](const boost::system::error_code&, size_t) {
-                        logger.write("400", FATAL);
-                        b.consume(bytes);
-                        auth(socket);
-                      });
-        }
-      });
+  async_read_until(socket, b, "\nEND",
+                   [&](const boost::system::error_code& ec, size_t bytes) {
+                     if (!ec) {
+                       std::istream is(&b);
+                       is >> REQ;
+                       logger.write(REQ, DEBUG);
+                       if (REQ == "LOGIN") {
+                         sign_in(socket, is);
+                         b.consume(bytes);
+                       } else if (REQ == "SIGNUP") {
+                         sign_up(socket, is);
+                         b.consume(bytes);
+                         auth(socket);
+                       } else {
+                         async_write(
+                             socket, boost::asio::buffer("400"),
+                             [&](const boost::system::error_code&, size_t) {
+                               logger.write("400", FATAL);
+                               b.consume(bytes);
+                               auth(socket);
+                             });
+                       }
+                     } else {
+                       logger.write(ec.message(), DEBUG);
+                     }
+                   });
 }
 
 void sign_in(ip::tcp::socket& socket, std::istream& is) {
