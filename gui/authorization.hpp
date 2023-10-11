@@ -4,6 +4,7 @@
 #include <QTcpSocket>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QLabel>
 
 class Auth : public QWidget {
   Q_OBJECT
@@ -12,6 +13,7 @@ class Auth : public QWidget {
   QLineEdit* _pass;
   QPushButton* _btn_login;
   QPushButton* _btn_sign;
+  QLabel* _info_label;
   QVBoxLayout* _layout;
   QTcpSocket* _socket;
 
@@ -24,4 +26,6 @@ class Auth : public QWidget {
  private slots:
   void login();
   void signup();
+ signals:
+  void textlogin();
 };

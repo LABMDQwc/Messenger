@@ -1,11 +1,11 @@
 #include "authorization.hpp"
-#include <QLabel>
 
 Auth::Auth(QTcpSocket* socket)
     : _login(new QLineEdit),
       _pass(new QLineEdit),
       _btn_login(new QPushButton("Log in")),
       _btn_sign(new QPushButton("Sign up")),
+      _info_label(new QLabel),
       _layout(new QVBoxLayout),
       _socket(socket) {
   connect(_btn_login, SIGNAL(clicked()), this, SLOT(login()));
@@ -15,6 +15,8 @@ Auth::Auth(QTcpSocket* socket)
   _layout->addWidget(_pass);
   _layout->addWidget(_btn_login);
   _layout->addWidget(_btn_sign);
+  _layout->addWidget(_info_label);
+  _info_label->setVisible(false);
   setLayout(_layout);
 }
 
@@ -24,6 +26,7 @@ Auth::~Auth() {
   delete _btn_login;
   delete _btn_sign;
   delete _layout;
+  delete _info_label;
 }
 
 QString Auth::get_login() {
@@ -35,38 +38,31 @@ QString Auth::get_pass() {
 }
 
 void Auth::login() {
-  QLabel* log_in = new QLabel("Haven't logged in");
+  _info_label->setVisible(true);
   _socket->write("LOGIN\n");
   _socket->write(get_login().toLocal8Bit());
   _socket->write("\n");
   _socket->write(get_pass().toLocal8Bit());
   _socket->write("\nEND");
-  _socket->waitForBytesWritten(1000);
-  _socket->waitForReadyRead(1000);
+  _socket->waitForBytesWritten(250);
+  _socket->waitForReadyRead(250);
   if (!qstrcmp(_socket->readLine().data(), "LOGIN")) {
-    log_in->setText("Log in Successfully");
-    qDebug() << "log in";
-  } else {
-    log_in->setText("Failed logging in");
-    qDebug() << "fail log in";
+    _info_label->setText("Logged in Successfully");
+    emit textlogin();
   }
-  _layout->addWidget(log_in);
-  delete log_in;
+  else
+    _info_label->setText("Failed logging in");
 }
 
 void Auth::signup() {
-  QLabel* sign_up = new QLabel("Haven't registered");
+  _info_label->setVisible(true);
   _socket->write("SIGNUP\n");
   _socket->write(get_login().toLocal8Bit());
   _socket->write("\n");
   _socket->write(get_pass().toLocal8Bit());
   _socket->write("\nEND");
-  _socket->waitForBytesWritten(1000);
-  _socket->waitForReadyRead(3000);
-  if (!qstrcmp(_socket->readLine().data(), "SIGNUP")) {
-    sign_up->setText("Registered Successfully");
-    qDebug() << "registered";
-  }
-  _layout->addWidget(sign_up);
-  delete sign_up;
+  _socket->waitForBytesWritten(250);
+  _socket->waitForReadyRead(250);
+  if (!qstrcmp(_socket->readLine().data(), "SIGNUP"))
+    _info_label->setText("Registered Successfully");
 }
