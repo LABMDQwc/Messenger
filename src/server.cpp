@@ -87,10 +87,6 @@ void sign_up(ip::tcp::socket& socket, std::istream& is) {
   users_db.close();
 }
 
-// void make_session(ip::tcp::socket& socket) {
-
-// }
-
 bool find_acc(const std::string& login, const std::string& pass) {
   std::fstream users_db("users_db");
   std::string db_login, db_pass;
